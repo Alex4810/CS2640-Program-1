@@ -1,3 +1,8 @@
+#CS 2640.01
+#October 29, 2023
+#https://github.com/Alex4810/CS2640-Program-1
+#Darien Lin and Alexander Lin
+
 .data
 inputPrompt1: .asciiz "Enter the first integer: "
 inputPrompt2: .asciiz "Enter the second integer: "
