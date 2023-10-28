@@ -1,22 +1,32 @@
+#User input ad output, arithmetic operation practice, and conditions
+
 #CS 2640.01
 #October 29, 2023
 #https://github.com/Alex4810/CS2640-Program-1
 #Darien Lin and Alexander Lin
+#Will take in two values from user and do arithmetic operations on it below and check to see if the numbers are the same
 
 .data
-inputPrompt1: .asciiz "Enter the first integer: "
-inputPrompt2: .asciiz "Enter the second integer: "
-outputMessage1: .asciiz "You entered the first integer: "
-outputMessage2: .asciiz "You entered the second integer: "
+inputPrompt1: .asciiz "\nEnter the first integer: "
+inputPrompt2: .asciiz "\nEnter the second integer: "
+outputMessage1: .asciiz "\nYou entered the first integer:"
+outputMessage2: .asciiz "\nYou entered the second integer: "
+addMessage: .asciiz "\nAddition of both numbers: "
+subMessage: .asciiz "\nSubtraction of both numbers: "
+mulResult: .asciiz "\nMultiplication Result: "
+divResult: .asciiz "\nDivision Result: "
+newLine: .asciiz "\n"
+same: .asciiz "\nUser inputs are the same"
+notSame: .asciiz "\nUser input are different"
+
 
 .text
-.main
-
 main:
     # Prompt for the first integer and read user input
     li $v0, 4               # Load system call code for printing string
     la $a0, inputPrompt1    # Load address of the first input prompt
     syscall
+    
     li $v0, 5               # Load system call code for reading integer
     syscall
     move $s0, $v0           # Store the first integer in $s0
@@ -36,7 +46,11 @@ main:
     move $a0, $s0           # Load the first user input to be printed
     li $v0, 1               # Load system call code for printing integer
     syscall
-
+    
+    li $v0, 4       # Load system call code for printing string
+    la $a0, newLine       # load address of newline
+    syscall
+ 
     # Output the second user input
     li $v0, 4               # Load system call code for printing string
     la $a0, outputMessage2  # Load address of the second output message
@@ -44,7 +58,75 @@ main:
     move $a0, $s1           # Load the second user input to be printed
     li $v0, 1               # Load system call code for printing integer
     syscall
-
-    # Exit program
-    li $v0, 10              # Load system call code for program exit
+    
+    
+    #loads add message
+    li $v0, 4
+    la $a0, addMessage
     syscall
+    
+    #adds and prints the two ints
+    add $t0, $s1, $s0
+    li $v0, 1
+    move $a0, $t0
+    syscall
+
+    
+    #loads subtract message
+    li $v0, 4
+    la $a0, subMessage
+    syscall
+    
+    #subtracts and prints two ints
+    sub $t0, $s0, $s1
+    li $v0, 1
+    move $a0, $t0
+    syscall
+
+
+    mul $t2, $s0, $s1       # Multiplication: $s0 * $s1
+
+    
+    li $v0, 4               # Load system call code for printing string
+    la $a0, mulResult       # Load address of the multiplication result message
+    syscall
+    move $a0, $t2           # Load the multiplication result to be printed
+    li $v0, 1               # Load system call code for printing integer
+    syscall
+
+    div $s0, $s1            # Division: $s0 / $s1
+    mflo $t3                # Load quotient into $t3
+
+    li $v0, 4               # Load system call code for printing string
+    la $a0, divResult       # Load address of the division result message
+    syscall
+    move $a0, $t3           # Load the division result to be printed
+    li $v0, 1               # Load system call code for printing integer
+    syscall
+
+    
+    #jumps to equal branch if two nums are equal
+    beq $s0, $s1, equal
+    
+    #jumps to notEqual branch if two nums are different
+    bne $s0, $s1 notEqual
+    
+ #equal branch, prints useri inputs are the same if the user inputs are same   
+equal:
+	li $v0, 4
+	la $a0, same
+	syscall
+	j exit
+
+#not equal branch, prints user input different if the user inputs are different
+notEqual:
+	li $v0, 4
+	la $a0, notSame
+	syscall
+	j exit
+	
+#exit branch	
+exit:
+	#exits program
+	 li $v0, 10              # Load system call code for program exit
+    	 syscall
