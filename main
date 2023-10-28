@@ -5,7 +5,7 @@ outputMessage1: .asciiz "You entered the first integer: "
 outputMessage2: .asciiz "You entered the second integer: "
 
 .text
-.globl main
+.main
 
 main:
     # Prompt for the first integer and read user input
